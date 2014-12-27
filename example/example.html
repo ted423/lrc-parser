@@ -105,6 +105,20 @@
     };
     
     loadLrc();
+    $('audio')[0].addEventListener('play',function(){
+    	var s = $('audio')[0].currentTime * 1000 || 0;
+    	lrc.play(s);
+    	showTimer(s);
+    })
+    $('audio')[0].addEventListener('pause',function(){
+    	lrc.pauseToggle();
+    	showTimer.pause();
+    })
+    $('audio')[0].addEventListener('seek',function(){
+    	var offset = $('audio')[0].currentTime * 1 || 0
+    	lrc.seek(offset);
+    	showTimer.seek(offset);
+    })
   })
   </script>
 </head>
@@ -125,6 +139,7 @@
 	<li>3.lrc</li>
 	<li>4.lrc</li>
 </ul>
+<audio id="audioPlayer" controls="controls" src="アルティナ（CV：井上麻里奈） - 山吹色に萌ゆる風.ogg"></audio>
 <div id="timer"></div>
 <div id="out"></div>
 </div>
