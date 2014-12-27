@@ -1,5 +1,6 @@
-lrc
-===
+本项目继承自<https://github.com/justan/lrc>
+主要尝试支持audio标签控制LRC，以及多行歌词的支持(见example)
+------
 
 a javascript lrc parser
 
