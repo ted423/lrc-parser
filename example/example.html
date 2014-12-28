@@ -105,12 +105,23 @@
     };
     
     loadLrc();
-    $('audio')[0].addEventListener('play',function(){
+   /* $('audio')[0].addEventListener('play',function(){
+    	var s = $('audio')[0].currentTime * 1000 || 0;
+    	lrc.play(s);
+    	showTimer(s);
+    })*/
+    $('audio')[0].addEventListener('playing',function(){
+     console.log('2');
     	var s = $('audio')[0].currentTime * 1000 || 0;
     	lrc.play(s);
     	showTimer(s);
     })
     $('audio')[0].addEventListener('pause',function(){
+    	lrc.pauseToggle();
+    	showTimer.pause();
+    })
+    $('audio')[0].addEventListener('waiting',function(){
+    console.log('1');
     	lrc.pauseToggle();
     	showTimer.pause();
     })
