@@ -1,5 +1,6 @@
 本项目继承自<https://github.com/justan/lrc>
 主要尝试支持audio标签控制LRC，以及多行歌词的支持(见example)
+由于是从audio标签里获取时间，因此在使用时请注意$('audio')[0]是否能获得正确的标签
 ------
 
 a javascript lrc parser

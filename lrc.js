@@ -121,7 +121,7 @@ var Lrc = (function(){
               if(that.lines[that.curLine]){
                 that._timer = setTimeout(function(){
                   loopy();
-                }, that.lines[that.curLine].time - (Date.now() - that._startStamp));
+                }, that.lines[that.curLine].time - $('audio')[0].currentTime * 1000);
                 //}, that.lines[that.curLine].time - that.lines[that.curLine--].time);//一些情况可能用得上
               }else{
                 //end
