@@ -102,7 +102,7 @@ var Lrc = (function(){
         var that = this;
         
         time = time || 0;
-        that._startStamp = Date.now() - time;//相对开始时间戳
+        //that._startStamp = Date.now() - time;//相对开始时间戳
         that.state = 1;
         
         if(that.isLrc){
@@ -131,18 +131,13 @@ var Lrc = (function(){
         }
       }
     , pauseToggle: function(){
-        var now = Date.now();
         if(this.state){
           this.stop();
-          this._pauseStamp = now;
-        }else{
-          this.play((this._pauseStamp || now) - (this._startStamp || now), true);
-          delete this._pauseStamp;
         }
       }
     , seek: function(offset){
-        this._startStamp -= offset;
-        this.state && this.play(Date.now() - this._startStamp);//播放时让修改立即生效
+        //this._startStamp -= offset;
+        this.state && this.play($('audio')[0].currentTime * 1000);//播放时让修改立即生效
       }
     , stop: function(){
         this.state = 0;
@@ -163,3 +158,51 @@ var Lrc = (function(){
 if(typeof module !== 'undefined' && this.module !== module){
   module.exports.Lrc = Lrc;
 }
+
+$(function(){
+	var $lrcInput = $("#lrc")
+      , $out = $("#out")
+      , lrc
+      ;
+	
+	var loadLrc = function(url){
+      $lrcInput.val('歌词加载中..');
+      
+      lrc && lrc.stop();
+      
+      $.ajax({
+      	url : 'lrcs/1.lrc',
+      	dataType : 'text',//设置一下dataType
+      	success : function(x){
+      	}}).done(function(txt){
+        $lrcInput[0].textContent=txt;
+        lrc = parse(txt)
+      })
+    };
+	var parse = function (txt){
+      return new Lrc(txt, function(text, extra){
+       // if(!text){ return }
+        var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
+        $out.empty().append(pre.fadeIn('slow'))
+      });
+    };
+    
+    loadLrc();
+	
+    $('audio')[0].addEventListener('playing',function(){
+     console.log('2');
+    	var s = $('audio')[0].currentTime * 1000 || 0;
+    	lrc.play(s);
+    })
+    $('audio')[0].addEventListener('pause',function(){
+    	lrc.pauseToggle();
+    })
+    $('audio')[0].addEventListener('waiting',function(){
+    console.log('1');
+    	lrc.pauseToggle();
+    })
+    $('audio')[0].addEventListener('seek',function(){
+    	var offset = $('audio')[0].currentTime * 1 || 0
+    	lrc.seek(offset);
+    })
+  })
