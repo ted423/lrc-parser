@@ -7,12 +7,6 @@
   <script type="text/javascript" src="../lrc.js"></script>
   <script type="text/javascript">
   $(function(){
-    var $lrcInput = $("#lrc")
-      , $out = $("#out")
-      , $timer = $("#timer")
-      , lrc
-      ;
-    
     $("#parse").click(function(){
       lrc = parse($lrcInput.val());
     });
@@ -38,98 +32,7 @@
       lrc.seek(offset);
       showTimer.seek(offset);
     })
-    
-    
-    var loadLrc = function(url){
-      $lrcInput.val('歌词加载中..');
-      
-      lrc && lrc.stop();
-      showTimer.stop();
-      
-      $.ajax({
-      	url : 'lrcs/1.lrc',
-      	dataType : 'text',//设置一下dataType
-      	success : function(x){
-      	}}).done(function(txt){
-        $lrcInput[0].textContent=txt;
-        lrc = parse(txt)
-      })
-    };
-    
-    var showTimer = (function(){
-      var timeStamp, timer
-        , state, curTime
-        ;
-      var fn = function(time){
-        time = time || 0;
-        timeStamp = Date.now() - time;
-        show(time);
-      };
-      
-      fn.pause = function(){
-        state ? fn.stop() : fn(curTime);
-      };
-      
-      fn.stop = function(){
-        clearTimeout(timer);
-        state = false;
-      };
-      
-      fn.seek = function(offset){
-        timeStamp -= offset;
-        if(!state) curTime += offset;
-      };
-      
-      function show(time){
-        var sec = ((time / 1000) % 60).toFixed(2)
-          , min = Math.floor(time / 60000)
-        curTime = time;
-        $timer.text(min + ':' + sec);
-        clearTimeout(timer);
-        timer = setTimeout(function(){
-          show(Date.now() - timeStamp);
-        }, 10);
-        state = true;
-      }
-      return fn;
-    })();
-    
-    var parse = function (txt){
-      return new Lrc(txt, function(text, extra){
-       // if(!text){ return }
-        var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
-        console.log($timer[0].textContent);
-        console.log(LrcMap[extra.lineNum].txt);
-        $out.empty().append(pre.fadeIn('slow'))
-      });
-    };
-    
-    loadLrc();
-   /* $('audio')[0].addEventListener('play',function(){
-    	var s = $('audio')[0].currentTime * 1000 || 0;
-    	lrc.play(s);
-    	showTimer(s);
-    })*/
-    $('audio')[0].addEventListener('playing',function(){
-     console.log('2');
-    	var s = $('audio')[0].currentTime * 1000 || 0;
-    	lrc.play(s);
-    	showTimer(s);
-    })
-    $('audio')[0].addEventListener('pause',function(){
-    	lrc.pauseToggle();
-    	showTimer.pause();
-    })
-    $('audio')[0].addEventListener('waiting',function(){
-    console.log('1');
-    	lrc.pauseToggle();
-    	showTimer.pause();
-    })
-    $('audio')[0].addEventListener('seek',function(){
-    	var offset = $('audio')[0].currentTime * 1 || 0
-    	lrc.seek(offset);
-    	showTimer.seek(offset);
-    })
+	
   })
   </script>
 </head>
@@ -144,15 +47,19 @@
   <button id="parse" type="button">parse</button>
 </form>
 <div style="overflow: hidden; margin: 0 0 0 20px;">
-<ul id="list">
-	<li>1.lrc</li>
-	<li>2.lrc</li>
-	<li>3.lrc</li>
-	<li>4.lrc</li>
-</ul>
-<audio id="audioPlayer" controls="controls" src="アルティナ（CV：井上麻里奈） - 山吹色に萌ゆる風.ogg"></audio>
-<div id="timer"></div>
+<audio id="audioPlayer" controls="controls" src="夏色のマーメイド.ogg"></audio>
 <div id="out"></div>
 </div>
+<style>
+#out pre{
+text-align:center;
+padding: 5px 15px;
+font-family: consolas,Courier,monospace,serif;
+line-height: 1.5em;
+overflow: auto;
+letter-spacing: 0px;
+font-size:1.5em;
+}
+</style>
 </body>
 </html>
