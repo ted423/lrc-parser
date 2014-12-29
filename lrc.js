@@ -181,7 +181,6 @@ $(function(){
     };
 	var parse = function (txt){
       return new Lrc(txt, function(text, extra){
-       // if(!text){ return }
         var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
         $out.empty().append(pre.fadeIn('slow'))
       });
@@ -190,7 +189,7 @@ $(function(){
     loadLrc();
 	
     $('audio')[0].addEventListener('playing',function(){
-     console.log('2');
+     //console.log('2');
     	var s = $('audio')[0].currentTime * 1000 || 0;
     	lrc.play(s);
     })
@@ -198,7 +197,7 @@ $(function(){
     	lrc.pauseToggle();
     })
     $('audio')[0].addEventListener('waiting',function(){
-    console.log('1');
+    //console.log('1');
     	lrc.pauseToggle();
     })
     $('audio')[0].addEventListener('seek',function(){
