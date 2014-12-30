@@ -1,39 +1,10 @@
 本项目继承自<https://github.com/justan/lrc>
 主要尝试支持audio标签控制LRC，以及多行歌词的支持(见example)
-由于是从audio标签里获取时间，因此在使用时请注意$('audio')[0]是否能获得正确的标签
+而且删除了一些东西
+尝试将核心功能和参数分开。理论上只要在页面中指定 $lrcInput(歌词字符串),$out（输出歌词的标签）,$audio（audio标签）即可
+
 ------
 
 a javascript lrc parser
 
-lrc 是个 [lrc 歌词][1]解析程序, 并且有 lrc 播放功能.
-可用于 node 和 browser 环境.
-
-## 安装
-  
-  - In node: `npm install lrc`
-  - In browser: `<script type="text/javascript" src="lrc.js"></script>` 
-  
-在浏览器中暂不支持模块加载器.
-
-## 用法示例
-
-```javascript
-
-//创建实例
-var lrcStr = "[ti: title]\n[ar: artist]\n[00:01.00]line 1\n[00:05.00]line 2"
-var lrc = new Lrc(lrcStr, outputHandler);
-
-//定义歌词输出处理程序
-function outputHandler(line, extra){
-  console.log(line)
-}
-
-//播放控制
-lrc.play();
-lrc.pauseTogle();
-lrc.seek(500);
-lrc.stop();
-
-```
-
-[1]: https://zh.wikipedia.org/wiki/LRC
+lrc 是个 [lrc 歌词]解析程序, 并且有 lrc 播放功能.

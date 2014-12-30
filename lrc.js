@@ -3,7 +3,20 @@
  * @version 0.1.0
  */
 
-var LrcMap,startLine;
+var LrcMap,startLine,$lrcInput,$out,$audio,lrc;
+
+var parse = function (txt){
+	return new Lrc(txt, function(text, extra){
+		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
+		$out.empty().append(pre.fadeIn('slow'))
+	});
+};
+
+var loadLrc = function($lrcInput){
+	lrc = parse($lrcInput);
+	lrc.listener();
+}
+
 var Lrc = (function(){
   Date.now = Date.now || (new Date).getTime;
   var timeExp = /\[(\d{2,})\:(\d{2})(?:\.(\d{2,3}))?\]/g
@@ -121,7 +134,7 @@ var Lrc = (function(){
               if(that.lines[that.curLine]){
                 that._timer = setTimeout(function(){
                   loopy();
-                }, that.lines[that.curLine].time - $('audio')[0].currentTime * 1000);
+                }, that.lines[that.curLine].time - $audio.currentTime * 1000);
                 //}, that.lines[that.curLine].time - that.lines[that.curLine--].time);//一些情况可能用得上
               }else{
                 //end
@@ -137,12 +150,30 @@ var Lrc = (function(){
       }
     , seek: function(offset){
         //this._startStamp -= offset;
-        this.state && this.play($('audio')[0].currentTime * 1000);//播放时让修改立即生效
+        this.state && this.play($audio.currentTime * 1000);//播放时让修改立即生效
       }
     , stop: function(){
         this.state = 0;
         clearTimeout(this._timer);
       }
+    , listener: function(){
+    	$audio.addEventListener('playing',function(){
+     //console.log('2');
+    	var s = $audio.currentTime * 1000 || 0;
+    	lrc.play(s);
+    })
+    $audio.addEventListener('pause',function(){
+    	lrc.pauseToggle();
+    })
+    $audio.addEventListener('waiting',function(){
+    //console.log('1');
+    	lrc.pauseToggle();
+    })
+    $audio.addEventListener('seek',function(){
+    	var offset = $audio.currentTime * 1 || 0
+    	lrc.seek(offset);
+    })
+    }
   };
     
   Parser.trim = function(lrc){
@@ -155,49 +186,8 @@ var Lrc = (function(){
 })();
 
 
-$(function(){
-	var $lrcInput = $("#lrc")
-      , $out = $("#out")
-      , lrc
-      ;
+
+
 	
-	var loadLrc = function(url){
-      $lrcInput.val('歌词加载中..');
-      
-      lrc && lrc.stop();
-      
-      $.ajax({
-      	url : 'lrcs/1.lrc',
-      	dataType : 'text',//设置一下dataType
-      	success : function(x){
-      	}}).done(function(txt){
-        $lrcInput[0].textContent=txt;
-        lrc = parse(txt)
-      })
-    };
-	var parse = function (txt){
-      return new Lrc(txt, function(text, extra){
-        var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
-        $out.empty().append(pre.fadeIn('slow'))
-      });
-    };
-    
-    loadLrc();
-	
-    $('audio')[0].addEventListener('playing',function(){
-     //console.log('2');
-    	var s = $('audio')[0].currentTime * 1000 || 0;
-    	lrc.play(s);
-    })
-    $('audio')[0].addEventListener('pause',function(){
-    	lrc.pauseToggle();
-    })
-    $('audio')[0].addEventListener('waiting',function(){
-    //console.log('1');
-    	lrc.pauseToggle();
-    })
-    $('audio')[0].addEventListener('seek',function(){
-    	var offset = $('audio')[0].currentTime * 1 || 0
-    	lrc.seek(offset);
-    })
-  })
+
+ 

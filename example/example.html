@@ -7,6 +7,22 @@
   <script type="text/javascript" src="../lrc.js"></script>
   <script type="text/javascript">
   $(function(){
+  $out = $("#out");
+  $audio=$('audio')[0];
+	(function(url){
+      $("#lrc").val('歌词加载中..');
+
+      $.ajax({
+      	url : 'lrcs/1.lrc',
+      	dataType : 'text',//设置一下dataType
+      	success : function(x){
+      	}}).done(function(txt){
+        $("#lrc")[0].textContent=txt;
+        $lrcInput=txt;
+        loadLrc($lrcInput);
+      })
+    })();
+      
     $("#parse").click(function(){
       lrc = parse($lrcInput.val());
     });
@@ -32,6 +48,9 @@
       lrc.seek(offset);
       showTimer.seek(offset);
     })
+    
+
+	
 	
   })
   </script>
@@ -42,7 +61,7 @@
   <label for="startTime"><input type="text" id="startTime" /></label>
   <button id="play" type="button">play</button>
   <button id="seek" type="button">seek</button>
-  <button id="pause" type="button">pause_play</button>
+  <button id="pause" type="button">pause</button>
   <button id="stop" type="button">stop</button>
   <button id="parse" type="button">parse</button>
 </form>
