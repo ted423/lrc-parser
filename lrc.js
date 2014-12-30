@@ -154,10 +154,6 @@ var Lrc = (function(){
   return Parser;
 })();
 
-//node.js module
-if(typeof module !== 'undefined' && this.module !== module){
-  module.exports.Lrc = Lrc;
-}
 
 $(function(){
 	var $lrcInput = $("#lrc")
