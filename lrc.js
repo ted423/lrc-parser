@@ -29,12 +29,6 @@ var Lrc = (function(){
     }
     ;
   
-  /**
-   * lrc parser
-   * @param {string} lrc lrc 歌词字符串
-   * @param {function} [handler] 
-   * @constructor
-   */
   var Parser = function(lrc, handler){
     lrc = Parser.trim(lrc);
     this.lrc = lrc;//lrc 歌词
