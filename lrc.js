@@ -1,14 +1,11 @@
-/**
- * lrc parser and player
- * @version 0.1.0
- */
 
-var LrcMap,startLine,$lrcInput,$out,$audio,lrc;
+var LrcMap,$out,$audio;
 
 var parse = function (txt){
 	return new Lrc(txt, function(text, extra){
 		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
-		$out.empty().append(pre.fadeIn('slow'))
+		pre.append($("<div id='progressBar' style='position: relative;'>"));
+		$out.empty().append(pre.fadeIn('slow'));
 	});
 };
 
@@ -82,7 +79,6 @@ var Lrc = (function(){
     	}
     };
     LrcMap=this.lines;
-    startLine=LrcMap[0].originLineNum;
   };
   
   //按照时间点确定歌词行数
@@ -128,6 +124,7 @@ var Lrc = (function(){
               if(that.lines[that.curLine]){
                 that._timer = setTimeout(function(){
                   loopy();
+				  
                 }, that.lines[that.curLine].time - $audio.currentTime * 1000);
                 //}, that.lines[that.curLine].time - that.lines[that.curLine--].time);//一些情况可能用得上
               }else{
@@ -179,9 +176,3 @@ var Lrc = (function(){
   return Parser;
 })();
 
-
-
-
-	
-
- 
