@@ -18,14 +18,9 @@
       	success : function(x){
       	}}).done(function(txt){
         $("#lrc")[0].textContent=txt;
-        $lrcInput=txt;
-        loadLrc($lrcInput);
+        loadLrc(txt);
       })
     })();
-      
-    $("#parse").click(function(){
-      lrc = parse($lrcInput.val());
-    });
     
     $("#play").click(function(){
       var s = $("#startTime").val() * 1000 || 0
