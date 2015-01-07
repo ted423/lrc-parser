@@ -3,7 +3,7 @@ var LrcMap,$out,$audio;
 
 var parse = function (txt){
 	return new Lrc(txt, function(text, extra){
-		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
+		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt);
 		pre.append($("<div id='progressBar' style=''>"));
 		$out.empty().append(pre);
 	});
