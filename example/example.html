@@ -10,16 +10,9 @@
   $out = $("#out");
   $audio=$('audio')[0];
 	(function(url){
-      $("#lrc").val('歌词加载中..');
 
-      $.ajax({
-      	url : 'lrcs/1.lrc',
-      	dataType : 'text',//设置一下dataType
-      	success : function(x){
-      	}}).done(function(txt){
-        $("#lrc")[0].textContent=txt;
-        loadLrc(txt);
-      })
+        loadLrc($("#lrc")[0].textContent);
+      
     })();
     
     $("#play").click(function(){
@@ -52,7 +45,93 @@
 </head>
 <body>
 <form action="#" style="float: left">
-	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">111</pre>
+	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">[ti:山吹色に萌ゆる風]
+[ar:アルティナ(cv.井上麻里奈)]
+[al:pspソフト シャイニング・ブレイド キャラクターソングアルバム]
+[by:增城otaku]
+
+[ed:4]
+[00:01.000]山吹色に萌ゆる風
+[00:05.000]PSPソフト「シャイニング・ブレイド」キャラクターソング
+[00:09.000]作詞：RUCCA
+[00:13.000]作曲：菊田大介(Elements Garden)
+[00:17.000]編曲：菊田大介(Elements Garden)
+[00:21.000]歌：アルティナ(cv.井上麻里奈)
+[00:25.000]
+[00:27.040]ふわり　そよぐ風が　こころを解(ほど)けば
+[00:27.040]fuwari　soyogukazega　kokorowohodokeba
+[00:27.040]微微的轻风拂开了心门
+[00:34.980]ゆらり　優しくなる　空のように
+[00:34.980]yurari　yasashikunaru　soranoyouni
+[00:34.980]轻轻的化作了温柔 像漂浮在天空一般 
+[00:42.290]こっちへおいでよ　手の鳴るほうへと　想いが響けば
+[00:42.290]kocchiheoideyo　tenonaruhouheto　omoigahibikeba
+[00:42.290]将拍手呼唤的思念在心中传递的话 
+[00:50.170]動物たちや　精霊たちとも　愛が通うの
+[00:50.170]doubutsutachiya　seireitachitomo　aigakayouno
+[00:50.170]与动物精灵们也可以心心相通吧 
+[00:57.330]LaLa　繋がってく　温かさで
+[00:57.330]lala tsunagatteku　atatakasade
+[00:57.330]lala~歌声将温馨系在了一起 
+[01:01.860]奏でられた「ありがとう」
+[01:01.860]kanaderareta「arigatou」
+[01:01.860]奏出了一声「谢谢」 
+[01:05.710]出逢いすべて　祝福して唄おう
+[01:05.710]deaisubete　syukufukushiteutaou
+[01:05.710]对相遇的一切 欢唱出心中的祝福 
+[01:11.150]オレンジの風が　夢のよう　舞い踊るあしたへ
+[01:11.150]orenjinokazega　yumenoyou　maiodoruashitahe
+[01:11.150]如梦想般起舞的橙色微风吹向了明天 
+[01:23.140]
+[01:38.030]“せつない”“いとしい”“うれしい”やわらかな気持ち
+[01:38.030]"setsunai"　"itoshii"　"ureshii"　yawarakanakimochi
+[01:38.030]“悲伤” “怜爱” “高兴” 
+[01:45.500]きっと　ひとりだけじゃ　抱(いだ)けないね
+[01:45.500]kitto　hitoridakejya　idakenaine
+[01:45.500]一定 不是只有你才怀有着这样温柔的心情 
+[01:53.320]「認め合うことは　赦(ゆる)すのと同じ」風が教えてる
+[01:53.320]「mitomeaukotowa　yurusunotoonaji」kazegaoshieteru
+[01:53.320]风儿告诉了我「认可也是一种宽容」 
+[02:01.270]畏れないで　未来を信じて　想い届けたい
+[02:01.270]osorenaide　miraiwoshinjite　omoitodoketai
+[02:01.270]不要畏惧 相信着未来 请将这份思念传达出去 
+[02:08.310]
+[02:08.630]まだ　生まれたての　このメッセージ
+[02:08.630]mada　umaretateno　konomesseji
+[02:08.630]刚刚浮现出来的这句话语 
+[02:12.780]つよく　ふかく「ありがとう」
+[02:12.780]tsuyoku　fukaku「arigatou」
+[02:12.780]饱含着深深的「感谢」 
+[02:16.640]“仲間”という　コトバが私の中
+[02:16.640]"nakama"toiu　kotobagawatashinonaka
+[02:16.640]从心底理解了“同伴”的含义
+[02:22.160]夢とキスをして　輝いて　絆へかわってく
+[02:22.160]yumetokisuwoshite　kagayaite　kizunahekawatteku
+[02:22.160]亲吻着闪闪发光的梦想
+[02:33.950]
+[02:50.470]
+[02:52.470]こっちへおいでよ　手の鳴るほうへと　想いが響けば
+[02:52.470]kocchiheoideyo　tenonaruhouheto　omoigahibikeba
+[02:52.470]将拍手呼唤的思念在心中传递的话 
+[03:00.290]動物たちや　精霊たちとも　愛が通うの
+[03:00.290]doubutsutachiya　seireitachitomo　aigakayouno
+[03:00.290]与动物精灵们也可以心心相通吧 
+[03:07.510]
+[03:07.830]LaLa　繋がってく　温かさで
+[03:07.830]lala tsunagatteku　atatakasade
+[03:07.830]lala~歌声将温馨系在了一起 
+[03:12.140]奏でられた「ありがとう」
+[03:12.140]kanaderareta「arigatou」
+[03:12.140]奏出了一声「谢谢」 
+[03:15.800]出逢いすべて　祝福して唄おう
+[03:15.800]deaisubete　syukufukushiteutaou
+[03:15.800]对相遇的一切 欢唱出心中的祝福 
+[03:21.260]オレンジの風が　夢のよう　舞い踊るあしたへ
+[03:21.260]orenjinokazega　yumenoyou　maiodoruashitahe
+[03:21.260]如梦想般起舞的橙色微风吹向了明天
+[03:33.930]
+[03:41.000]終わり
+[03:51.000]</pre>
   <label for="startTime"><input type="text" id="startTime" /></label>
   <button id="play" type="button">play</button>
   <button id="seek" type="button">seek</button>
@@ -74,6 +153,11 @@ letter-spacing: 0px;
 font-size:1.5em;
 display: table !important;
 margin: 0 auto;
+}
+#progressBar{
+position: absolute;
+background:#3BB4F2;
+opacity:0.2; 
 }
 </style>
 </body>
