@@ -118,7 +118,6 @@ var Lrc = (function(){
 			}
 		}
         time = time || 0;
-        //that._startStamp = Date.now() - time;//相对开始时间戳
         that.state = 1;
         
         if(that.isLrc){
@@ -152,19 +151,23 @@ var Lrc = (function(){
     , pauseToggle: function(){
         if(this.state){
           this.stop();
+		  if($out[0].childNodes[0]&&$out[0].childNodes[0].textContent!=''){
+			  $('#progressBar').stop();
+		  }
         }
       }
     , seek: function(offset){
-        //this._startStamp -= offset;
         this.state && this.play($audio.currentTime * 1000);//播放时让修改立即生效
       }
     , stop: function(){
         this.state = 0;
         clearTimeout(this._timer);
+		if($out[0].childNodes[0]&&$out[0].childNodes[0].textContent!=''){
+			$('#progressBar').stop();
+		  }
       }
     , listener: function(){
     	$audio.addEventListener('playing',function(){
-     //console.log('2');
     	var s = $audio.currentTime * 1000 || 0;
     	lrc.play(s);
     })
@@ -172,7 +175,6 @@ var Lrc = (function(){
     	lrc.pauseToggle();
     })
     $audio.addEventListener('waiting',function(){
-    //console.log('1');
     	lrc.pauseToggle();
     })
     $audio.addEventListener('seek',function(){
