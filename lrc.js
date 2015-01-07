@@ -4,8 +4,8 @@ var LrcMap,$out,$audio;
 var parse = function (txt){
 	return new Lrc(txt, function(text, extra){
 		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt).hide();
-		pre.append($("<div id='progressBar' style='position: relative;'>"));
-		$out.empty().append(pre.fadeIn('slow'));
+		pre.append($("<div id='progressBar' style=''>"));
+		$out.empty().append(pre);
 	});
 };
 
@@ -97,13 +97,26 @@ var Lrc = (function(){
       , lineNum: i
     })
   }
-  
+
+
   //lrc stream control and output
   Parser.prototype = {
       //time: 播放起点, skipLast: 是否忽略即将播放歌词的前一条(可能是正在唱的)
+	  
       play: function(time, skipLast){
         var that = this;
-        
+		
+        function lrcAnimate(that){
+			if($out[0].childNodes[0]&&$out[0].childNodes[0].textContent!=''){
+			var barHeight=$out[0].childNodes[0].scrollHeight,barMWidth=$out[0].childNodes[0].scrollWidth;
+			var barNWidth=barMWidth*($audio.currentTime*1000-that.lines[that.curLine-1].time)/(that.lines[that.curLine].time-that.lines[that.curLine-1].time);
+			$('#progressBar').css("width",barNWidth);
+			$('#progressBar').css("height",barHeight);
+			$('#progressBar').css("top",$out[0].childNodes[0].offsetTop);
+			$('#progressBar').css("left",$out[0].childNodes[0].offsetLeft);
+			$('#progressBar').animate({width:barMWidth},that.lines[that.curLine].time-$audio.currentTime*1000);
+			}
+		}
         time = time || 0;
         //that._startStamp = Date.now() - time;//相对开始时间戳
         that.state = 1;
@@ -113,23 +126,25 @@ var Lrc = (function(){
           
           if(!skipLast){
             that.curLine && focusLine.call(that, that.curLine - 1);
+			lrcAnimate(that);
           }
           
           if(that.curLine < that.lines.length){
           
             clearTimeout(that._timer);
+			
             that._timer = setTimeout(function loopy(){
               focusLine.call(that, that.curLine++);
-              
+			  lrcAnimate(that);
               if(that.lines[that.curLine]){
                 that._timer = setTimeout(function(){
                   loopy();
-				  
                 }, that.lines[that.curLine].time - $audio.currentTime * 1000);
                 //}, that.lines[that.curLine].time - that.lines[that.curLine--].time);//一些情况可能用得上
               }else{
                 //end
               }
+			  lrcAnimate(that);
             }, that.lines[that.curLine].time - time)
           }
         }
@@ -175,4 +190,3 @@ var Lrc = (function(){
   };
   return Parser;
 })();
-
