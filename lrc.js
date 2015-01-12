@@ -1,5 +1,5 @@
 function loadLrc($lrcInput,$out,$audio){
-	
+	var LrcMap;
 	var Lrc = (function(){
   Date.now = Date.now || (new Date).getTime;
   var timeExp = /\[(\d{2,})\:(\d{2})(?:\.(\d{2,3}))?\]/g
@@ -179,7 +179,7 @@ function loadLrc($lrcInput,$out,$audio){
   return Parser;
 })();
 
-lrc = new Lrc($lrcInput, function(text, extra){
+var lrc = new Lrc($lrcInput, function(text, extra){
 		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt);
 		pre.append($("<div id='progressBar' style=''>"));
 		$out.empty().append(pre);

@@ -7,37 +7,8 @@
   <script type="text/javascript" src="../lrc.js"></script>
   <script type="text/javascript">
   $(function(){
-	(function(url){
-
-        loadLrc($("#lrc")[0].textContent,$("#out"),$('audio')[0]);
+  	loadLrc($("#lrc")[0].textContent,$("#out"),$('audio')[0]);
       
-    })();
-    
-    $("#play").click(function(){
-      var s = $("#startTime").val() * 1000 || 0
-      lrc.play(s);
-      showTimer(s);
-    });
-    
-    $("#pause").click(function(){
-      lrc.pauseToggle();
-      showTimer.pause();
-    })
-    
-    $("#stop").click(function(){
-      lrc.stop();
-      showTimer.stop();
-    })
-    
-    $("#seek").click(function(){
-      var offset = $("#startTime").val() * 1 || 0
-      lrc.seek(offset);
-      showTimer.seek(offset);
-    })
-    
-
-	
-	
   })
   </script>
 </head>
@@ -180,11 +151,10 @@
 
 <script type="text/javascript">
   $(function(){
-	(function(url){
+	
 
         loadLrc($('pre')[1].textContent,$("#out1"),$('audio')[1]);
       
-    })();
 	})
 	</script>
 <style>
