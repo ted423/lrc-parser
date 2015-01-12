@@ -1,25 +1,25 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
 	<title></title>
-  <script type="text/javascript" src="../jquery-2.1.3.min.js"></script>
-  <script type="text/javascript" src="../lrc.js"></script>
-  <script type="text/javascript">
-  $(function(){
-  	loadLrc($("#lrc")[0].textContent,$("#out"),$('audio')[0]);
-      
-  })
-  </script>
+	<script type="text/javascript" src="../jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="../lrc.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			loadLrc($("#lrc")[0].textContent, $("#out"), $('audio')[0]);
+
+		})
+	</script>
 </head>
 <body>
-<audio id="audioPlayer" controls="controls" src="アルティナ（CV：井上麻里奈） - 山吹色に萌ゆる風.ogg"></audio>
-<div id="out" class='out'></div>
-	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">[ti:山吹色に萌ゆる風]
+	<audio id="audioPlayer" controls="controls" src="アルティナ（CV：井上麻里奈） - 山吹色に萌ゆる風.ogg"></audio>
+	<div id="out" class='out'></div>
+	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">
+[ti:山吹色に萌ゆる風]
 [ar:アルティナ(cv.井上麻里奈)]
 [al:pspソフト シャイニング・ブレイド キャラクターソングアルバム]
 [by:增城otaku]
-
 [ed:4]
 [00:01.000]山吹色に萌ゆる風
 [00:05.000]PSPソフト「シャイニング・ブレイド」キャラクターソング
@@ -101,16 +101,16 @@
 [03:21.260]如梦想般起舞的橙色微风吹向了明天
 [03:33.930]
 [03:41.000]終わり
-[03:51.000]</pre>
+[03:51.000]
+</pre>
 
-<audio id="audioPlayer" controls="controls" src="【初音ミク】Lonely Night Complex 【オリジナル】.mp3"></audio>
-<div id="out1" class='out'></div>
+	<audio id="audioPlayer" controls="controls" src="【初音ミク】Lonely Night Complex 【オリジナル】.mp3"></audio>
+	<div id="out1" class='out'></div>
 	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">
 [ti:Lonely Night Complex]
 [ar:初音]
 [al:Arumin]
 [by:破灭梦]
-
 [00:00.00]感谢 学习之徒 帮忙打的歌词
 [00:01.00]
 [00:16.50]小夜の调べに
@@ -147,34 +147,36 @@
 [02:58.00]陽炎の中 彷徨って
 [03:03.00]Irony holic 溶けゆく夜に
 [03:08.00]感じる I'm lonely night complex
-[03:13.00]</pre>
+[03:13.00]
+</pre>
 
-<script type="text/javascript">
-  $(function(){
-	
+	<script type="text/javascript">
+		$(function () {
 
-        loadLrc($('pre')[1].textContent,$("#out1"),$('audio')[1]);
-      
-	})
+
+			loadLrc($('pre')[1].textContent, $("#out1"), $('audio')[1]);
+
+		})
 	</script>
-<style>
-.out pre{
-text-align:center;
-padding: 5px 15px;
-font-family: consolas,Courier,monospace,serif;
-line-height: 1.5em;
-overflow: auto;
-letter-spacing: 0px;
-font-size:1.5em;
-display: table !important;
-margin: 0 auto;
-padding: 0px !important;
-}
-#progressBar{
-position: absolute;
-background:#3BB4F2;
-opacity:0.2; 
-}
-</style>
+	<style>
+		.out pre {
+			text-align: center;
+			padding: 5px 15px;
+			font-family: consolas,Courier,monospace,serif;
+			line-height: 1.5em;
+			overflow: auto;
+			letter-spacing: 0px;
+			font-size: 1.5em;
+			display: table !important;
+			margin: 0 auto;
+			padding: 0px !important;
+		}
+
+		#progressBar {
+			position: absolute;
+			background: #3BB4F2;
+			opacity: 0.2;
+		}
+	</style>
 </body>
 </html>
