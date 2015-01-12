@@ -96,11 +96,12 @@ function loadLrc($lrcInput,$out,$audio){
 			if($out[0].childNodes[0]&&$out[0].childNodes[0].textContent!=''){
 			var barHeight=$out[0].childNodes[0].scrollHeight,barMWidth=$out[0].childNodes[0].scrollWidth;
 			var barNWidth=barMWidth*($audio.currentTime*1000-that.lines[that.curLine-1].time)/(that.lines[that.curLine].time-that.lines[that.curLine-1].time);
-			$('#progressBar').css("width",barNWidth);
-			$('#progressBar').css("height",barHeight);
-			$('#progressBar').css("top",$out[0].childNodes[0].offsetTop);
-			$('#progressBar').css("left",$out[0].childNodes[0].offsetLeft);
-			$('#progressBar').animate({width:barMWidth},that.lines[that.curLine].time-$audio.currentTime*1000);
+			var $progressBar = $($out[0].childNodes[0].childNodes[1]);
+			$progressBar.css("width",barNWidth);
+			$progressBar.css("height",barHeight);
+			$progressBar.css("top",$out[0].childNodes[0].offsetTop);
+			$progressBar.css("left",$out[0].childNodes[0].offsetLeft);
+			$progressBar.animate({width:barMWidth},that.lines[that.curLine].time-$audio.currentTime*1000);
 			}
 		}
         time = time || 0;
@@ -138,7 +139,8 @@ function loadLrc($lrcInput,$out,$audio){
         if(this.state){
           this.stop();
 		  if($out[0].childNodes[0]&&$out[0].childNodes[0].textContent!=''){
-			  $('#progressBar').stop();
+		  	var $progressBar = $($out[0].childNodes[0].childNodes[1]);
+			  $progressBar.stop();
 		  }
         }
       }
@@ -149,7 +151,8 @@ function loadLrc($lrcInput,$out,$audio){
         this.state = 0;
         clearTimeout(this._timer);
 		if($out[0].childNodes[0]&&$out[0].childNodes[0].textContent!=''){
-			$('#progressBar').stop();
+			var $progressBar = $($out[0].childNodes[0].childNodes[1]);
+			$progressBar.stop();
 		  }
       }
     , listener: function(){
