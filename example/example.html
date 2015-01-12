@@ -7,11 +7,9 @@
   <script type="text/javascript" src="../lrc.js"></script>
   <script type="text/javascript">
   $(function(){
-  $out = $("#out");
-  $audio=$('audio')[0];
 	(function(url){
 
-        loadLrc($("#lrc")[0].textContent);
+        loadLrc($("#lrc")[0].textContent,$("#out"),$('audio')[0]);
       
     })();
     
@@ -44,7 +42,8 @@
   </script>
 </head>
 <body>
-<form action="#" style="float: left">
+<audio id="audioPlayer" controls="controls" src="アルティナ（CV：井上麻里奈） - 山吹色に萌ゆる風.ogg"></audio>
+<div id="out" class='out'></div>
 	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">[ti:山吹色に萌ゆる風]
 [ar:アルティナ(cv.井上麻里奈)]
 [al:pspソフト シャイニング・ブレイド キャラクターソングアルバム]
@@ -132,18 +131,64 @@
 [03:33.930]
 [03:41.000]終わり
 [03:51.000]</pre>
-  <label for="startTime"><input type="text" id="startTime" /></label>
-  <button id="play" type="button">play</button>
-  <button id="seek" type="button">seek</button>
-  <button id="pause" type="button">pause</button>
-  <button id="stop" type="button">stop</button>
-  <button id="parse" type="button">parse</button>
-</form>
-<audio id="audioPlayer" controls="controls" src="アルティナ（CV：井上麻里奈） - 山吹色に萌ゆる風.ogg"></audio>
-<div id="out"></div>
-</div>
+
+<audio id="audioPlayer" controls="controls" src="【初音ミク】Lonely Night Complex 【オリジナル】.mp3"></audio>
+<div id="out1" class='out'></div>
+	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">
+[ti:Lonely Night Complex]
+[ar:初音]
+[al:Arumin]
+[by:破灭梦]
+
+[00:00.00]感谢 学习之徒 帮忙打的歌词
+[00:01.00]
+[00:16.50]小夜の调べに
+[00:21.50]震えたその声
+[00:26.50]渴き掠れた
+[00:31.50]輪迴のメロディ
+[00:36.50]
+[00:38.00]淋しさ 切なさ 心がきしみ
+[00:42.50]温もり 冷めた 手のひら
+[00:46.50]I'm lonely holic 浅い眠り
+[00:52.20]陽炎の中 彷徨って
+[00:56.80]Irony holic 溶けゆくように
+[01:02.50]彼方へとさらう旋律
+[01:06.50]
+[01:17.50]風のない夜
+[01:21.50]
+[01:22.50]止まない静けさ
+[01:27.50]色を失い
+[01:31.50]弔う淚
+[01:37.50]優しさ 恋しさ 切り取ったまま
+[01:43.00]焦がれて 逆立つ心
+[01:47.00]So,lonely holic 深い眠り
+[01:52.00]孤高の海 漂って
+[01:57.00]Irony holic 宙舞うように
+[02:02.00]梦の中响く旋律
+[02:07.00]
+[02:23.50]愛しさ 悲しさ 紙一重なら
+[02:28.50]どちらも 消し滅ぼしたい
+[02:32.50]I'm lonely holic 永い眠り
+[02:37.50]孤独の闇 かき分けて
+[02:42.50]Irony holic 喪失の
+[02:48.00]渦に身を委ねて
+[02:53.00]I'm lonely holic 浅い眠り
+[02:58.00]陽炎の中 彷徨って
+[03:03.00]Irony holic 溶けゆく夜に
+[03:08.00]感じる I'm lonely night complex
+[03:13.00]</pre>
+
+<script type="text/javascript">
+  $(function(){
+	(function(url){
+
+        loadLrc($('pre')[1].textContent,$("#out1"),$('audio')[1]);
+      
+    })();
+	})
+	</script>
 <style>
-#out pre{
+.out pre{
 text-align:center;
 padding: 5px 15px;
 font-family: consolas,Courier,monospace,serif;
