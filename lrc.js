@@ -1,20 +1,6 @@
-
-var LrcMap,$out,$audio;
-
-var parse = function (txt){
-	return new Lrc(txt, function(text, extra){
-		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt);
-		pre.append($("<div id='progressBar' style=''>"));
-		$out.empty().append(pre);
-	});
-};
-
-var loadLrc = function($lrcInput){
-	lrc = parse($lrcInput);
-	lrc.listener();
-}
-
-var Lrc = (function(){
+function loadLrc($lrcInput,$out,$audio){
+	
+	var Lrc = (function(){
   Date.now = Date.now || (new Date).getTime;
   var timeExp = /\[(\d{2,})\:(\d{2})(?:\.(\d{2,3}))?\]/g
     , tagsRegMap = {
@@ -192,3 +178,11 @@ var Lrc = (function(){
   };
   return Parser;
 })();
+
+lrc = new Lrc($lrcInput, function(text, extra){
+		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt);
+		pre.append($("<div id='progressBar' style=''>"));
+		$out.empty().append(pre);
+	});
+	lrc.listener();
+}
