@@ -98,7 +98,7 @@ function loadLrc($lrcInput, $out, $audio) {
 						$progressBar.css("left", $out[0].childNodes[0].offsetLeft);
 						$progressBar.animate({ width: barMWidth }, that.lines[that.curLine].time - $audio.currentTime * 1000);
 					}
-					else if($out[0].childNodes[0].textContent == ''){
+					else if($out[0].childNodes[0] && $out[0].childNodes[0].textContent == ''){
 						$out[0].childNodes[0].style.cssText="border:none !important";
 					}
 				}
