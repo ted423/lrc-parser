@@ -94,8 +94,8 @@ function loadLrc($lrcInput, $out, $audio) {
 						var $progressBar = $($out[0].childNodes[0].childNodes[1]);
 						$progressBar.css("width", barNWidth);
 						$progressBar.css("height", barHeight);
-						$progressBar.css("top", $out[0].childNodes[0].offsetTop);
-						$progressBar.css("left", $out[0].childNodes[0].offsetLeft);
+						$progressBar.css("top", $out[0].childNodes[0].offsetTop+1);
+						$progressBar.css("left", $out[0].childNodes[0].offsetLeft+1);
 						$progressBar.animate({ width: barMWidth }, that.lines[that.curLine].time - $audio.currentTime * 1000);
 					}
 					else if($out[0].childNodes[0] && $out[0].childNodes[0].textContent == ''){
