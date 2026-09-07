@@ -35,6 +35,14 @@ function loadLrc($lrcInput, $out, $audio) {
 					_last = timeExp.lastIndex;
 					line = Parser.trim(lines[i].replace(timeExp, ''));
 					timeExp.lastIndex = _last;
+					if (time[3] === undefined) {
+						this.isLrc = false;
+						this.lines = [];
+						this.txts = [];
+						LrcMap = this.lines;
+						$out.empty().append($("<pre>").text('LRC 解析错误: 第 ' + (i + 1) + ' 行 ' + time[0] + ' 缺少毫秒, 不支持无毫秒时间戳, 已停止解析'));
+						return;
+					}
 					if (time[3].length == 2)
 						this.lines.push({
 							time: time[1] * 60 * 1000 + time[2] * 1000 + (time[3] || 0) * 10
