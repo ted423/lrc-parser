@@ -106,7 +106,7 @@
 
 	<audio id="audioPlayer" controls="controls" src="【初音ミク】Lonely Night Complex 【オリジナル】.mp3"></audio>
 	<div id="out1" class='out'></div>
-	<pre name="lrc" id="lrc" style="width: 100%; min-height: 400px;">
+	<pre name="lrc" id="lrc1" style="width: 100%; min-height: 400px;">
 [ti:Lonely Night Complex]
 [ar:初音]
 [al:Arumin]
@@ -154,7 +154,7 @@
 		$(function () {
 
 
-			loadLrc($('pre')[1].textContent, $("#out1"), $('audio')[1]);
+			loadLrc($("#lrc1")[0].textContent, $("#out1"), $('audio')[1]);
 
 		})
 	</script>
