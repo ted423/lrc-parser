@@ -1,196 +1,152 @@
-function loadLrc($lrcInput, $out, $audio) {
-	var LrcMap;
-	var Lrc = (function () {
-		Date.now = Date.now || (new Date).getTime;
-		var timeExp = /\[(\d{2,})\:(\d{2})(?:\.(\d{2,3}))?\]/g
-		, tagsRegMap = {
-			title: 'ti'
-			, artist: 'ar'
-			, album: 'al'
-			, offset: 'offset'
-			, by: 'by'
-		};
+(function () {
+	'use strict';
 
-		var Parser = function (lrc, handler) {
-			lrc = Parser.trim(lrc);
-			this.lrc = lrc;//lrc 歌词
-			this.handler = handler || function () { }
-			this.tags = {};//ID tags. 标题, 歌手, 专辑
-			this.lines = [];//详细的歌词信息
-			this.txts = [];
-			this.isLrc = Parser.isLrc(lrc);
-			this.curLine = 0;//
-			this.state = 0;// 0: stop, 1: playing
-			var res, line, time, lines = lrc.split(/\n/)
-			, _last;
+	const TIME_EXP = /\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?\]/g;
+	const TAG_NAMES = {
+		title: 'ti'
+		, artist: 'ar'
+		, album: 'al'
+		, offset: 'offset'
+		, by: 'by'
+	};
 
-			for (var tag in tagsRegMap) {
-				res = lrc.match(new RegExp('\\[' + tagsRegMap[tag] + ':([^\\]]*)\\]', 'i'));
-				this.tags[tag] = res && res[1] || '';
-			}
-
-			timeExp.lastIndex = 0;
-			for (var i = 0, l = lines.length; i < l; i++) {
-				while (time = timeExp.exec(lines[i])) {
-					_last = timeExp.lastIndex;
-					line = Parser.trim(lines[i].replace(timeExp, ''));
-					timeExp.lastIndex = _last;
-					if (time[3] === undefined) {
-						this.isLrc = false;
-						this.lines = [];
-						this.txts = [];
-						LrcMap = this.lines;
-						$out.empty().append($("<pre>").text('LRC 解析错误: 第 ' + (i + 1) + ' 行 ' + time[0] + ' 缺少毫秒, 不支持无毫秒时间戳, 已停止解析'));
-						return;
-					}
-					if (time[3].length == 2)
-						this.lines.push({
-							time: time[1] * 60 * 1000 + time[2] * 1000 + (time[3] || 0) * 10
-							, originLineNum: i
-							, txt: line
-						});
-					else this.lines.push({
-						time: time[1] * 60 * 1000 + time[2] * 1000 + (time[3] || 0) * 1
-						, originLineNum: i
-						, txt: line
-					});
-					this.txts.push(line);
-				}
-			}
-
-			this.lines.sort(function (a, b) {
-				return a.time - b.time;
-			});
-			for (var i = 0; i <= this.lines.length; i++) {
-				if (this.lines[i + 1])
-					if (this.lines[i].time == this.lines[i + 1].time) {
-						this.lines[i + 1].txt = this.lines[i].txt + '\n' + this.lines[i + 1].txt;
-						this.lines.splice(i, 1);
-						i--;
-					}
-			};
-			LrcMap = this.lines;
-		};
-
-		//按照时间点确定歌词行数
-		function findCurLine(time) {
-			for (var i = 0, l = this.lines.length; i < l; i++) {
-				if (time <= this.lines[i].time) {
-					break;
-				}
-			}
-			return i;
+	// 解析为纯数据: { tags, lines: [{time, txt}], error }
+	// error: { lineNum, timestamp } 表示无毫秒时间戳, 解析立即停止
+	function parseLrc(text) {
+		const tags = {};
+		for (const [name, tag] of Object.entries(TAG_NAMES)) {
+			const m = text.match(new RegExp('\\[' + tag + ':([^\\]]*)\\]', 'i'));
+			tags[name] = m ? m[1] : '';
 		}
 
-		function focusLine(i) {
-			this.handler.call(this, this.lines[i].txt, {
-				originLineNum: this.lines[i].originLineNum
-				, lineNum: i
-			})
+		const lines = [];
+		const sourceLines = text.split(/\r?\n/);
+		for (let i = 0; i < sourceLines.length; i++) {
+			const times = [...sourceLines[i].matchAll(TIME_EXP)];
+			if (times.length === 0) continue;
+			const txt = sourceLines[i].replace(TIME_EXP, '').trim();
+			for (const m of times) {
+				if (m[3] === undefined) {
+					return { tags, lines: [], error: { lineNum: i + 1, timestamp: m[0] } };
+				}
+				const ms = m[3].length === 2 ? m[3] * 10 : m[3] * 1;
+				lines.push({ time: m[1] * 60000 + m[2] * 1000 + ms, txt });
+			}
 		}
 
-		//lrc stream control and output
-		Parser.prototype = {
-			//time: 播放起点, skipLast: 是否忽略即将播放歌词的前一条(可能是正在唱的)
-			play: function (time, skipLast) {
-				var that = this;
+		lines.sort((a, b) => a.time - b.time);
 
-				function lrcAnimate(that) {
-					if ($out[0].childNodes[0] && $out[0].childNodes[0].textContent != '') {
-						var barHeight = $out[0].childNodes[0].scrollHeight, barMWidth = $out[0].childNodes[0].scrollWidth;
-						var barNWidth = barMWidth * ($audio.currentTime * 1000 - that.lines[that.curLine - 1].time) / (that.lines[that.curLine].time - that.lines[that.curLine - 1].time);
-						var $progressBar = $($out[0].childNodes[0].childNodes[1]);
-						$progressBar.css("width", barNWidth);
-						$progressBar.css("height", barHeight);
-						$progressBar.css("top", $out[0].childNodes[0].offsetTop+1);
-						$progressBar.css("left", $out[0].childNodes[0].offsetLeft+1);
-						$progressBar.animate({ width: barMWidth }, that.lines[that.curLine].time - $audio.currentTime * 1000);
-					}
-					else if($out[0].childNodes[0] && $out[0].childNodes[0].textContent == ''){
-						$out[0].childNodes[0].style.cssText="border:none !important";
-					}
-				}
-				time = time || 0;
-				that.state = 1;
+		// 相同时间戳的行合并为一行(多行歌词)
+		const merged = [];
+		for (const line of lines) {
+			const prev = merged[merged.length - 1];
+			if (prev && prev.time === line.time) prev.txt += '\n' + line.txt;
+			else merged.push(line);
+		}
+		return { tags, lines: merged, error: null };
+	}
 
-				if (that.isLrc) {
-					that.curLine = findCurLine.call(that, time);
-
-					if (!skipLast) {
-						that.curLine && focusLine.call(that, that.curLine - 1);
-						lrcAnimate(that);
-					}
-
-					if (that.curLine < that.lines.length) {
-
-						clearTimeout(that._timer);
-
-						that._timer = setTimeout(function loopy() {
-							focusLine.call(that, that.curLine++);
-							lrcAnimate(that);
-							if (that.lines[that.curLine]) {
-								that._timer = setTimeout(function () {
-									loopy();
-								}, that.lines[that.curLine].time - $audio.currentTime * 1000);
-							} else {
-								//end
-							}
-							lrcAnimate(that);
-						}, that.lines[that.curLine].time - time)
-					}
-				}
-			}
-			, pauseToggle: function () {
-				if (this.state) {
-					this.stop();
-					if ($out[0].childNodes[0] && $out[0].childNodes[0].textContent != '') {
-						var $progressBar = $($out[0].childNodes[0].childNodes[1]);
-						$progressBar.stop();
-					}
-				}
-			}
-			, seek: function (offset) {
-				this.state && this.play($audio.currentTime * 1000);//播放时让修改立即生效
-			}
-			, stop: function () {
-				this.state = 0;
-				clearTimeout(this._timer);
-				if ($out[0].childNodes[0] && $out[0].childNodes[0].textContent != '') {
-					var $progressBar = $($out[0].childNodes[0].childNodes[1]);
-					$progressBar.stop();
-				}
-			}
-			, listener: function () {
-				$audio.addEventListener('playing', function () {
-					var s = $audio.currentTime * 1000 || 0;
-					lrc.play(s);
-				})
-				$audio.addEventListener('pause', function () {
-					lrc.pauseToggle();
-				})
-				$audio.addEventListener('waiting', function () {
-					lrc.pauseToggle();
-				})
-				$audio.addEventListener('seek', function () {
-					var offset = $audio.currentTime * 1 || 0
-					lrc.seek(offset);
-				})
-			}
+	// 进度条定位依赖页面 CSS: .out pre 提供行容器, .progressBar 提供绝对定位样式
+	class LrcPlayer {
+		tick = () => {
+			this.render();
+			this.raf = requestAnimationFrame(this.tick);
 		};
 
-		Parser.trim = function (lrc) {
-			return lrc.replace(/(^\s*|\s*$)/m, '')
-		};
-		Parser.isLrc = function (lrc) {
-			return timeExp.test(lrc);
-		};
-		return Parser;
-	})();
+		constructor(lrcText, out, audio) {
+			const parsed = parseLrc(lrcText);
+			if (parsed.error) {
+				out.replaceChildren(createErrorPre(parsed.error));
+				return;
+			}
+			if (parsed.lines.length === 0) return;
 
-	var lrc = new Lrc($lrcInput, function (text, extra) {
-		var pre = $("<pre>").text(LrcMap[extra.lineNum].txt);
-		pre.append($("<div id='progressBar' style=''>"));
-		$out.empty().append(pre);
-	});
-	lrc.listener();
-}
+			this.out = out;
+			this.audio = audio;
+			this.lines = parsed.lines;
+			this.pre = null;
+			this.bar = null;
+			this.shownLine = -1;
+			this.raf = null;
+
+			audio.addEventListener('playing', () => this.start());
+			audio.addEventListener('pause', () => this.stop());
+			audio.addEventListener('waiting', () => this.stop());
+			audio.addEventListener('ended', () => this.stop());
+			audio.addEventListener('seeked', () => this.render());
+		}
+
+		start() {
+			this.render();
+			if (this.raf === null) this.raf = requestAnimationFrame(this.tick);
+		}
+
+		stop() {
+			this.render();
+			if (this.raf !== null) {
+				cancelAnimationFrame(this.raf);
+				this.raf = null;
+			}
+		}
+
+		// 每帧以 audio.currentTime 为唯一时间源, 同步行显示与进度条
+		render() {
+			const t = this.audio.currentTime * 1000;
+			const lines = this.lines;
+
+			let i = lines.length - 1;
+			while (i >= 0 && lines[i].time > t) i--;
+			if (i < 0) {
+				if (this.shownLine !== -1) {
+					this.shownLine = -1;
+					this.pre = this.bar = null;
+					this.out.replaceChildren();
+				}
+				return;
+			}
+
+			if (i !== this.shownLine) {
+				this.shownLine = i;
+				this.showLine(lines[i]);
+			}
+
+			const bar = this.bar;
+			if (!bar) return;
+			const cur = lines[i];
+			const next = lines[i + 1];
+			const fraction = next ? Math.min((t - cur.time) / (next.time - cur.time), 1) : 1;
+			bar.style.top = this.pre.offsetTop + 1 + 'px';
+			bar.style.left = this.pre.offsetLeft + 1 + 'px';
+			bar.style.height = this.pre.scrollHeight + 'px';
+			bar.style.width = this.pre.scrollWidth * fraction + 'px';
+		}
+
+		showLine(line) {
+			const pre = document.createElement('pre');
+			pre.textContent = line.txt;
+			if (line.txt) {
+				const bar = document.createElement('div');
+				bar.className = 'progressBar';
+				pre.append(bar);
+				this.bar = bar;
+			} else {
+				pre.style.border = 'none';
+				this.bar = null;
+			}
+			this.pre = pre;
+			this.out.replaceChildren(pre);
+		}
+	}
+
+	function createErrorPre(error) {
+		const pre = document.createElement('pre');
+		pre.textContent = `LRC 解析错误: 第 ${error.lineNum} 行 ${error.timestamp} 缺少毫秒, 不支持无毫秒时间戳, 已停止解析`;
+		return pre;
+	}
+
+	function loadLrc(lrcText, out, audio) {
+		return new LrcPlayer(lrcText, out, audio);
+	}
+
+	window.loadLrc = loadLrc;
+})();

@@ -4,10 +4,10 @@
 
 而且删除了一些东西,因为不懂node
 
-尝试将核心功能和参数分开。理论上只要在页面中指定 $lrcInput(歌词字符串),$out（输出歌词的标签）,$audio（audio标签）, 调用 `loadLrc($lrcInput, $out, $audio)` 即可:
+尝试将核心功能和参数分开, 移除了jquery。理论上只要在页面中指定 $lrcInput(歌词字符串),$out（输出歌词的标签）,$audio（audio标签）, 调用 `loadLrc($lrcInput, $out, $audio)` 即可:
 
 ```js
-loadLrc($("#lrc")[0].textContent, $("#out"), $('audio')[0]);
+loadLrc(document.querySelector('pre[name="lrc"]').textContent, document.querySelector('.out'), document.querySelector('audio'));
 ```
 
 完整示例见 `example/example.html`
