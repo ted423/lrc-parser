@@ -144,8 +144,13 @@
 		return pre;
 	}
 
-	function loadLrc(lrcText, out, audio) {
-		return new LrcPlayer(lrcText, out, audio);
+	// 三个参数均为元素选择器字符串: lrc 取匹配元素的 textContent
+	function loadLrc(lrc, out, audio) {
+		return new LrcPlayer(
+			document.querySelector(lrc).textContent,
+			document.querySelector(out),
+			document.querySelector(audio)
+		);
 	}
 
 	window.loadLrc = loadLrc;
